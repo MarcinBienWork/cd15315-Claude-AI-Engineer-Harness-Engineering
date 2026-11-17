@@ -43,3 +43,7 @@ tests/test_us05_plan_mode_doc.py::test_ac_05_06_all_cited_file_paths_exist PASSE
 tests/test_us05_plan_mode_doc.py::test_ac_05_07_combined_workflow_example PASSED                                     [100%]
 
 ==================================================== 35 passed in 1.11s ====================================================
+
+python -m ecommerce_team_config .
+OK
+
