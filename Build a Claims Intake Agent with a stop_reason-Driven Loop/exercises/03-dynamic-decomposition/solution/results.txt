@@ -1,0 +1,38 @@
+pytest tests/ -v
+=================================================== test session starts ====================================================
+platform darwin -- Python 3.13.18, pytest-9.2.0, pluggy-1.7.0
+rootdir: /Users/marcin.bien/Projects/Acn/cd15315-Claude-AI-Engineer-Harness-Engineering/Build a Claims Intake Agent with a stop_reason-Driven Loop/exercises/03-dynamic-decomposition/solution
+configfile: pyproject.toml
+plugins: anyio-4.16.0
+collected 30 items                                                                                                         
+
+tests/test_antipatterns.py ....                                                                                      [ 13%]
+tests/test_fixtures.py ........                                                                                      [ 40%]
+tests/test_loop.py .....                                                                                             [ 56%]
+tests/test_run_backstop.py .                                                                                         [ 60%]
+tests/test_tools.py ............                                                                                     [100%]
+
+==================================================== 30 passed in 4.61s ====================================================
+
+
+python -m claims_intake.run --all
+
+run_dir: /Users/marcin.bien/Projects/Acn/cd15315-Claude-AI-Engineer-Harness-Engineering/Build a Claims Intake Agent with a stop_reason-Driven Loop/exercises/03-dynamic-decomposition/solution/runs/20261117_085556
+[claim_01_kitchen_fire] policy=POL-1001 expected=routed
+  → outcome=escalated turns=2 clarifications=0 tokens=6267/400 est=$0.0083
+[claim_02_stolen_bike] policy=POL-1007 expected=routed
+  → outcome=escalated turns=2 clarifications=0 tokens=6165/430 est=$0.0083
+[claim_03_water_damage] policy=POL-1004 expected=routed
+  → outcome=escalated turns=5 clarifications=1 tokens=16396/675 est=$0.0198
+[claim_04_neighbor_injury] policy=POL-1002 expected=routed
+  → outcome=routed turns=5 clarifications=0 tokens=17714/924 est=$0.0223
+[claim_05_auto_collision] policy=POL-1003 expected=routed
+  → outcome=routed turns=4 clarifications=0 tokens=14983/975 est=$0.0199
+[claim_06_low_confidence_escalation] policy=POL-1008 expected=escalated
+  → outcome=escalated turns=3 clarifications=0 tokens=9551/693 est=$0.0130
+[claim_07_tree_falls_on_car] policy=POL-1005 expected=routed
+  → outcome=escalated turns=3 clarifications=0 tokens=9379/546 est=$0.0121
+[claim_08_minor_porch_damage] policy=POL-1006 expected=routed
+  → outcome=routed turns=4 clarifications=0 tokens=13751/858 est=$0.0180
+summary: /Users/marcin.bien/Projects/Acn/cd15315-Claude-AI-Engineer-Harness-Engineering/Build a Claims Intake Agent with a stop_reason-Driven Loop/exercises/03-dynamic-decomposition/solution/runs/20261117_085556/summary.md
+total estimated cost: $0.1217
