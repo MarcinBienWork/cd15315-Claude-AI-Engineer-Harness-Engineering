@@ -62,6 +62,13 @@ Replace each `→` with your answer. **Every answer cites at least one artifact 
 13. **Small state.** Byte size of your `hot_state.json`. Why does the budget matter for a system run once per shift, indefinitely?
     → `data/hot_state.json` is 965 bytes against `HOT_STATE_BYTE_BUDGET = 5_120`, about 19% of the budget. It holds 17 defect hashes (capped at 20), the shift summary, `active_alerts` and `threshold_statuses`. The file is loaded into every invocation's prompt, forever. Without a hard cap, small per-shift growth compounds until it crowds out working context, and no single run would show it. `write_atomic` raises if the payload exceeds the budget. It writes to a temp file, calls fsync, then uses `os.replace`, so a crash never leaves a torn file.
 
+13b. **Fork isolation.** How does a forked investigation (`fork.py`) stay isolated from the main hot state?
+    → `fork_for_hypothesis(base_hot_state_path, hypothesis_id, forks_root)` in `shift_monitor/fork.py` copies `data/hot_state.json` with `shutil.copyfile` into `forks/<hypothesis_id>/hot_state.json`. It only reads the base and writes the copy, so a fork starts from the same baseline but can never write back to the main file. Each fork also gets its own `scratchpad.jsonl` in that directory, so two hypotheses (H1, H2) never share a file. The only path back to the main scratchpad is the explicit `merge_findings`, which appends fork entries after the existing ones and never rewrites them. Three tests in `tests/test_us04_fork_scratchpad.py` pin this:
+    - `test_fork_for_hypothesis_copies_state_without_mutating_base` checks the fork copy is byte-identical and the base bytes are unchanged.
+    - `test_two_forks_produce_independent_scratchpads` checks that H1's conclusions never appear in H2's file and that the base `hot_state.json` bytes are the same after both forks write.
+    - `test_merge_findings_appends_without_rewriting_existing` checks the pre-existing line keeps its hash and the fork findings follow in input order.
+    This matters because hypotheses can be wrong. A failed investigation is discarded with its directory, so it cannot pollute the 965-byte hot state that every later shift loads. Only findings someone chose to merge survive. This is different from Q9: that fork isolates a Claude Code sub-agent's context, while `fork.py` isolates state files.
+
 ---
 
 ## Part 2 — Synthesis
